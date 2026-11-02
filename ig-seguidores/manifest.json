@@ -1,0 +1,46 @@
+{
+  "manifest_version": 3,
+  "name": "IG Seguidores",
+  "version": "1.5.0",
+  "description": "Veja quem não te segue de volta, seus fãs, novos seguidores e quem deixou de seguir; siga e deixe de seguir com limites e confirmação.",
+  "minimum_chrome_version": "111",
+  "icons": {
+    "16": "icons/icon16.png",
+    "32": "icons/icon32.png",
+    "48": "icons/icon48.png",
+    "128": "icons/icon128.png"
+  },
+  "action": {
+    "default_title": "Abrir IG Seguidores",
+    "default_icon": {
+      "16": "icons/icon16.png",
+      "32": "icons/icon32.png"
+    }
+  },
+  "background": {
+    "service_worker": "background.js"
+  },
+  "permissions": ["storage", "unlimitedStorage", "scripting", "tabs", "cookies"],
+  "host_permissions": ["https://*.instagram.com/*", "https://*.fbcdn.net/*", "https://*.cdninstagram.com/*"],
+  "content_scripts": [
+    {
+      "matches": ["https://*.instagram.com/*"],
+      "js": ["coletor.js"],
+      "run_at": "document_idle",
+      "all_frames": false
+    },
+    {
+      "matches": ["https://*.instagram.com/*"],
+      "js": ["ponte.js"],
+      "run_at": "document_idle",
+      "all_frames": false,
+      "world": "MAIN"
+    }
+  ],
+  "commands": {
+    "_execute_action": {
+      "suggested_key": { "default": "Alt+Shift+F" },
+      "description": "Abrir IG Seguidores"
+    }
+  }
+}

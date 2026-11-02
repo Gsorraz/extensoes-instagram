@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>IG Seguidores</title>
+  <link rel="stylesheet" href="painel.css">
+</head>
+<body>
+  <header class="top">
+    <div class="brand">
+      <h1>IG Seguidores</h1>
+      <p class="sub" id="status">Clique em <b>Atualizar listas</b> para começar.</p>
+    </div>
+    <div class="top-actions">
+      <select id="acct" title="Conta do Instagram mostrada no painel (cada conta guarda as suas listas)"></select>
+      <button id="btn-name" class="ghost" title="Dar um nome (@) à conta mostrada">✎</button>
+      <button id="btn-addacct" class="ghost" title="Escolher a conta do Instagram (ou entrar em outra)">Trocar conta</button>
+      <button id="btn-refresh" class="primary">Atualizar listas</button>
+      <button id="btn-pause" class="ghost" disabled>Pausar</button>
+      <button id="btn-stop" class="ghost" disabled>Parar</button>
+      <button id="btn-csv" class="ghost">Exportar CSV</button>
+      <button id="btn-log" class="ghost" title="Registro de erros e eventos (para diagnóstico)">Log</button>
+    </div>
+  </header>
+
+  <p class="warn">Seguir e deixar de seguir em massa viola os termos do Instagram e pode limitar ou bloquear a conta. Use poucas ações por dia, comece com 1 conta para conferir, e mantenha a janelinha do Instagram aberta e <b>visível</b> (sem minimizar) enquanto roda.</p>
+
+  <label class="chk incog"><input type="checkbox" id="p-incog" checked> Abrir o Instagram em janela anônima: o login dela é separado do seu Chrome, então o seu Instagram pessoal não é usado nem misturado.</label>
+
+  <div class="bar" id="progress" hidden>
+    <div class="bar-fill" id="progress-fill"></div>
+  </div>
+
+  <nav class="tabs" id="tabs" aria-label="Listas"></nav>
+
+  <section class="tools">
+    <input type="search" id="q" placeholder="Buscar por usuário ou nome" autocomplete="off">
+    <label class="chk"><input type="checkbox" id="f-ver"> Ocultar verificadas</label>
+    <label class="chk"><input type="checkbox" id="f-priv"> Ocultar privadas</label>
+    <label class="sel">Ordem
+      <select id="f-sort"><option value="rec">Mais recentes</option><option value="az">A–Z</option></select>
+    </label>
+  </section>
+
+  <section class="discover" id="discover" hidden>
+    <label>Seguidores de @ (até 5 perfis, separados por vírgula; vazio = sugestões do Instagram)
+      <input type="text" id="d-src" placeholder="perfil1, perfil2" autocomplete="off">
+    </label>
+    <button id="btn-discover" class="ghost">Só buscar contas</button>
+    <button id="btn-autofollow" class="primary">Buscar e seguir automaticamente</button>
+    <p class="note">Nunca segue quem você já segue, quem já te segue, quem você já deixou de seguir (pela ferramenta ou à mão), nem perfis privados. Escolha perfis do seu nicho: contas do mesmo público tendem a seguir de volta.</p>
+  </section>
+
+  <section class="discover" id="prot-tools" hidden>
+    <button id="prot-export" class="ghost">Exportar protegidos (JSON)</button>
+    <button id="prot-import" class="ghost">Importar protegidos (JSON)</button>
+    <input type="file" id="prot-file" accept=".json,application/json" hidden>
+    <label>Colar @usuários para proteger (separados por vírgula, espaço ou linha)
+      <textarea id="prot-text" rows="2" placeholder="amigo1, amigo2, cliente3"></textarea>
+    </label>
+    <button id="prot-paste" class="primary">Proteger estes</button>
+    <p class="note">Só entram contas que aparecem nas suas listas de seguindo ou seguidores. Contas protegidas (★) nunca são deixadas de seguir.</p>
+  </section>
+
+  <section class="actionbar">
+    <label class="chk"><input type="checkbox" id="sel-all"> Selecionar todas (<span id="n-filtered">0</span>)</label>
+    <span class="grow"></span>
+    <label class="chk"><input type="checkbox" id="p-all"> Usar todo o limite do dia</label>
+    <label class="num">Máx. nesta execução <input type="number" id="p-limit" min="1" max="200" value="40"></label>
+    <label class="num">Pausa (s, mín. 10) <input type="number" id="p-delay" min="10" max="120" value="15"></label>
+    <button id="btn-act" class="danger" disabled>Ação</button>
+  </section>
+  <p class="daily" id="daily"></p>
+
+  <section class="queue" id="queue" hidden>
+    <span id="queue-text"></span>
+    <button id="queue-go" class="primary">Continuar fila</button>
+    <button id="queue-clear" class="ghost">Limpar fila</button>
+  </section>
+
+  <main class="list" id="list"></main>
+  <div class="more"><button id="btn-more" class="ghost" hidden>Mostrar mais</button></div>
+
+  <dialog id="pick">
+    <h2>Qual conta do Instagram?</h2>
+    <div id="pick-list"></div>
+    <button id="pick-new" class="ghost">Entrar em outra conta</button>
+    <button id="pick-cancel" class="ghost">Cancelar</button>
+  </dialog>
+
+  <dialog id="logdlg">
+    <h2>Log</h2>
+    <textarea id="log-text" readonly rows="16" cols="80"></textarea>
+    <div class="log-actions">
+      <button id="log-copy" class="ghost">Copiar</button>
+      <button id="log-save" class="ghost">Baixar .txt</button>
+      <button id="log-clear" class="ghost">Limpar</button>
+      <button id="log-close" class="primary">Fechar</button>
+    </div>
+    <p class="note">Só guarda eventos e erros (sem senhas, cookies nem tokens). Fica neste navegador.</p>
+  </dialog>
+
+  <div class="toast" id="toast" role="status" hidden></div>
+  <script src="painel.js"></script>
+</body>
+</html>
